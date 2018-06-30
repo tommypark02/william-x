@@ -15,11 +15,12 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
  
   function welcome(agent) {
     agent.add(`Welcome to my agent!`);
+    agent.add('Running smoothly!');
   }
  
   function fallback(agent) {
-    agent.add(`I didn't understand`);
-    agent.add(`I'm sorry, can you try again?`);
+    agent.add(`I didn't understandd`);
+    agent.add(`I'm sorry, can you try againn?`);
 }
 
   // // Uncomment and edit to make your own intent handler
