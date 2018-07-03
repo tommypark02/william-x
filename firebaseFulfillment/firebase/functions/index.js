@@ -13,14 +13,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
  
-  function welcome(agent) {
+  function welcome(agent){
     agent.add(`Welcome to my agent!`);
-    agent.add('Running smoothly!');
+    agent.add(`Running smoothly!`);
   }
  
   function fallback(agent) {
     agent.add(`I didn't understandd`);
-    agent.add(`I'm sorry, can you try againn?`);
+    agent.add(`I'm sorry, can you try again?`);
 }
 
   // // Uncomment and edit to make your own intent handler
@@ -41,6 +41,21 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   //   agent.setContext({ name: 'weather', lifespan: 2, parameters: { city: 'Rome' }});
   // }
 
+function grabName(agent) {
+  agent.add(`This message is from Dialogflow's Cloud Functions for Firebase editor!`);
+  agent.add(new Card({
+      title: `Title: card title`,
+      imageUrl: 'https://developers.google.com/actions/images/badges/XPM_BADGING_GoogleAssistant_VER.png',
+      text: `body text of a card.  You can even use line\n  breaks and emoji! 💁`,
+      buttonText: 'a button',
+      buttonUrl: 'https://assistant.google.com/'
+    })
+  );
+  agent.add(new Suggestion(`Quick Reply`));
+  agent.add(new Suggestion(`Suggestion`));
+  agent.setContext({ name: 'weather', lifespan: 2, parameters: { city: 'Rome' }});
+}
+
   // // Uncomment and edit to make your own Google Assistant intent handler
   // // uncomment `intentMap.set('your intent name here', googleAssistantHandler);`
   // // below to get this function to be run when a Dialogflow intent is matched
@@ -56,6 +71,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   let intentMap = new Map();
   intentMap.set('Default Welcome Intent', welcome);
   intentMap.set('Default Fallback Intent', fallback);
+  intentMap.set('name.user.save', grabName();
   // intentMap.set('your intent name here', yourFunctionHandler);
   // intentMap.set('your intent name here', googleAssistantHandler);
   agent.handleRequest(intentMap);
