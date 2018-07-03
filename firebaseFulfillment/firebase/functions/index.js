@@ -5,6 +5,9 @@
 const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const {Card, Suggestion} = require('dialogflow-fulfillment');
+var url = api.openweathermap.org/data/2.5/weather/?q=Fairfax,us;
+
+var request = require('request');
  
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
  
@@ -19,8 +22,15 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   }
  
   function fallback(agent) {
-    agent.add(`I didn't understandd`);
+    agent.add(`I didn't understand`);
     agent.add(`I'm sorry, can you try again?`);
+}
+
+function temperature(agent){
+  request(url, function(err, res, body){
+  var data = JSON.parse(body);
+  agent.add(data.main['temp']);
+})
 }
 
   // // Uncomment and edit to make your own intent handler
@@ -71,7 +81,8 @@ function grabName(agent) {
   let intentMap = new Map();
   intentMap.set('Default Welcome Intent', welcome);
   intentMap.set('Default Fallback Intent', fallback);
-  intentMap.set('name.user.save', grabName();
+  intentMap.set('name.grab', grabName());
+  intentMap.set('weather.temp', temperature());
   // intentMap.set('your intent name here', yourFunctionHandler);
   // intentMap.set('your intent name here', googleAssistantHandler);
   agent.handleRequest(intentMap);
